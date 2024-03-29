@@ -1,0 +1,74 @@
+version: '3.1'
+
+services:
+ discovery:
+  container_name: discovery
+  image: discovery
+  ports:
+   - "8761:8761"
+  networks:
+   - zipkin
+
+ geteway:
+  container_name: geteway
+  build:
+   context: geteway
+  ports:
+   - "8222:8222"
+  networks:
+   - zipkin
+
+ zipkin:
+  container_name: zipkin
+  image: openzipkin/zipkin
+  ports:
+   - "9411:9411"
+  networks:
+   - zipkin
+
+ interaction-service:
+  container_name: interaction-service
+  build:
+   context: interaction-service
+  ports:
+   - "8070:8070"
+  networks:
+   - zipkin
+
+ friend-service:
+  container_name: friend-service
+  build:
+   context: friend-service
+  ports:
+   - "8078:8078"
+  networks:
+   - zipkin
+
+ service-post:
+  container_name: service-post
+  build:
+   context: service-post
+  ports:
+   - "8074:8074"
+  networks:
+   - zipkin
+
+ auth-service:
+  container_name: auth-service
+  image: auth-service
+  ports:
+   - "8101:8101"
+  networks:
+   - zipkin
+
+ user-service:
+  container_name: user-service
+  image: user-service
+  ports:
+   - "8083:8083"
+  networks:
+   - zipkin
+
+networks:
+ zipkin:
+  driver: bridge
